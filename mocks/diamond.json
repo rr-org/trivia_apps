@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "diamond": 200,
+    "image": "diamond.png",
+    "price": 10000
+  },
+  {
+    "id": 2,
+    "diamond": 500,
+    "image": "diamond500.png",
+    "price": 24000
+  },
+  {
+    "id": 3,
+    "diamond": 1000,
+    "image": "diamond1000.png",
+    "price": 45000
+  },
+  {
+    "id": 4,
+    "diamond": 1500,
+    "image": "diamond1500.png",
+    "price": 60000
+  },
+  {
+    "id": 5,
+    "diamond": 2000,
+    "image": "../../assets/diamond2000.png",
+    "price": 85000
+  }
+]
