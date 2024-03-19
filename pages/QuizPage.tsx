@@ -1,14 +1,16 @@
 import React from 'react'
 import { Layout } from '../layout/Layout'
-import { Home } from '../features/home/component/Home'
 import { StatusBar } from 'expo-status-bar'
+import { Quiz } from '../features/question/component/Quiz'
 import { NavigateType } from '../types/TypeNavigate'
 
-export const HomePage = ({ navigation }: NavigateType) => {
+export const QuizPage = ({ navigation } : NavigateType) => {
   return (
     <Layout>
-        <Home navigation={navigation}/>
+        <Quiz navigation={navigation} />
         <StatusBar style="auto" />
     </Layout>
   )
 }
+
+

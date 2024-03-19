@@ -1,7 +1,8 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
+  Pressable,
   ScrollView,
 } from "react-native";
 import {
@@ -15,23 +16,64 @@ import {
   Input,
   InputField,
   Heading,
+  AvatarImage,
   Image,
 } from "@gluestack-ui/themed";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { NavigateType } from "../../../types/TypeNavigate";
+import AV from "../../../mocks/avatar.json"
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 
-export default function AvatarPages() {
+interface IAvatar {
+  avatar: string,
+  kode: string
+}
+
+interface IInputAvatar {
+  avatar: string,
+  name: string
+}
+
+export const AvatarPages = ({ navigation }:NavigateType ) => {
+ const [ data, setData] = React.useState("")
+ const [ name, setName ] = React.useState("")
+ const [ aa, setAA ] = React.useState<IInputAvatar>({
+  avatar:"",
+  name:""
+ })
+ const [ avatar, setAvatar ] = React.useState<IAvatar[]>([])
+
+
+ React.useEffect(() => {
+  setAvatar(AV)
+ }, [])
+
+const handleChangeName = ( e: ChangeEvent<HTMLInputElement>) => {
+  // const { name, value }
+  // setName(e.target)
+}
+
+ const handleSubmit = () => {
+  console.log(data)
+  navigation.navigate('home')
+}
+
+ console.log("avatar", data)
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
     >
-      <ScrollView>
-        <Box py={"$6"} mt={"$20"}>
-          <Center>
+      <ScrollView  >
+        <Box py={"$6"} mt={"$10"}>
+          <Center >
             <Image
-              source={require("../../../assets/logo.png")}
+              source={require("../../../assets/rr.png")}
               w={'$40'}
               h={'$40'}
+              mt={'$10'}
+              alt="igame"
             />
           </Center>
           <Center my={20}>
@@ -39,74 +81,28 @@ export default function AvatarPages() {
               Choose Your Avatar
             </Heading>
           </Center>
-          <VStack gap={20}>
-            <HStack gap={20} justifyContent="center">
-              <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-                <Image
-                  source={require("../../../assets/AVATAR/Ellipse 1.png")}
-                />
-              </Avatar>
-              <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-                <Image
-                  source={require("../../../assets/AVATAR/Ellipse 2.png")}
-                />
-              </Avatar>
-              <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-                <Image
-                  source={require("../../../assets/AVATAR/Ellipse 3.png")}
-                />
-              </Avatar>
-              <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-                <Image
-                  source={require("../../../assets/AVATAR/Ellipse 4.png")}
-                />
-              </Avatar>
-            </HStack>
-            <HStack gap={20} justifyContent="center">
-              <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-                <Image
-                  source={require("../../../assets/AVATAR/Ellipse 5.png")}
-                />
-              </Avatar>
-              <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-                <Image
-                  source={require("../../../assets/AVATAR/Ellipse 6.png")}
-                />
-              </Avatar>
-              <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-                <Image
-                  source={require("../../../assets/AVATAR/Ellipse 7.png")}
-                />
-              </Avatar>
-              <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-                <Image
-                  source={require("../../../assets/AVATAR/Ellipse 8.png")}
-                />
-              </Avatar>
-            </HStack>
-            <HStack gap={20} justifyContent="center">
-              <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-                <Image
-                  source={require("../../../assets/AVATAR/Ellipse 9.png")}
-                />
-              </Avatar>
-              <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-                <Image
-                  source={require("../../../assets/AVATAR/Ellipse 10.png")}
-                />
-              </Avatar>
-              <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-                <Image
-                  source={require("../../../assets/AVATAR/Ellipse 12.png")}
-                />
-              </Avatar>
-              <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-                <Image
-                  source={require("../../../assets/AVATAR/Ellipse 13.png")}
-                />
-              </Avatar>
-            </HStack>
-          </VStack>
+          <Center>
+          <Box flexDirection="row" flexWrap="wrap" gap={20} justifyContent="center" w={'70%'} >
+            {avatar.map((items, index) => (
+              <Pressable key={index} onPress={()=> setData(items.kode)}>
+                <Avatar bgColor="$amber600" size={ data === items.kode ? "lg" : "md"} borderRadius="$full">
+                  <AvatarImage
+                    alt="igame"
+                    source={require("../../../assets/fotoAI.jpg")}
+                  
+                    />                  
+                </Avatar>
+                { data === items.kode && 
+                <Box w={'$5'} h={'$5'} bg="white" rounded={'$full'} p={'$1'} alignItems="center"  ml={'$10'} mt={'-$5'}>
+                  <FontAwesomeIcon icon={faCheck} />
+                </Box>
+                }
+              </Pressable>
+            ))}
+          </Box>
+          </Center>
+          
+
           <Center>
             <VStack gap={10} mt={"$10"} width={"$64"}>
               <Input
@@ -125,8 +121,13 @@ export default function AvatarPages() {
                   marginBottom="auto"
                 />
                 <InputField placeholder="Your Name" backgroundColor="$white" />
+                
               </Input>
-              <Button backgroundColor="$green500">
+              <Button 
+              backgroundColor="$green500" 
+              onPress={() => 
+              handleSubmit()
+              }>
                 <ButtonText fontWeight={"$extrabold"} fontSize={"$xl"}>
                   Continue
                 </ButtonText>

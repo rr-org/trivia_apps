@@ -1,0 +1,68 @@
+[
+    {
+        "question":"https://res.cloudinary.com/dhkm6rhsz/video/upload/v1710464970/trivia-apps/c8b03dbtvi9ffhgujky4.wav",
+        "answers":[
+            {
+                
+               "name":"gajah"
+            },
+            {
+                
+                "name":"kuda"
+            },
+            {
+                
+                "name":"ayam"
+            },
+            {
+               
+                "name":"buwung puyuh"
+            }
+        ],
+        "true":"buwung puyuh"
+    },
+    {
+        "question":"https://res.cloudinary.com/dhkm6rhsz/video/upload/v1710464970/trivia-apps/c8b03dbtvi9ffhgujky4.wav",
+        "answers":[
+            {
+                
+                "name":"gajah"
+            },
+            {
+                
+                "name":"kuda"
+            },
+            {
+                
+                "name":"ayam"
+            },
+            {
+               
+                "name":"buwung puyuh"
+            }
+        ],
+        "true":"kuda"
+    },
+    {
+        "question":"https://res.cloudinary.com/dhkm6rhsz/video/upload/v1710464970/trivia-apps/c8b03dbtvi9ffhgujky4.wav",
+        "answers":[
+            {
+                
+                "name":"gajah"
+            },
+            {
+                
+                "name":"kuda"
+            },
+            {
+                
+                "name":"ayam"
+            },
+            {
+               
+                "name":"buwung puyuh"
+            }
+        ],
+        "true": "gajah"
+    }
+]

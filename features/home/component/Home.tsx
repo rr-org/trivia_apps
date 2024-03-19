@@ -6,11 +6,18 @@ import { ModalBackdrop } from '@gluestack-ui/themed'
 import ChooseAvatar from '../../profile/components/ChooseAvatar'
 import { ButtonText } from '@gluestack-ui/themed'
 import BuyDiamond from '../../Diamond/components/BuyDiamond'
+import { NavigateType } from '../../../types/TypeNavigate'
+import { LogOut } from './LogOut'
+import { useUser } from '@clerk/clerk-expo'
 
 
-export const Home = () => {
+export const Home = ({ navigation }:NavigateType) => {
     const [ modal, setModal ] = React.useState(false)
     const [ shop, setShop ] = React.useState(false)
+    
+    const { user } = useUser()
+    
+   
     // const { sign } = HooksSgin()
   return (
     <View h={'$full'}>
@@ -95,10 +102,13 @@ export const Home = () => {
     
 
 
-        <Box w={'$full'} h={'100%'} display='flex'  alignItems='center' pt={'$56'} >
-            <Button w={'$1/2'} bg='$green500' shadowColor='$cyan100' shadowRadius={'$2'} > 
-                <Text color={'$white'} fontWeight='$bold' >Start Game</Text>
+        <Box w={'$full'} h={'50%'} display='flex'  alignItems='center' pt={'$56'} >
+            <Button w={'$1/2'} bg='$green500' shadowColor='$cyan100' shadowRadius={'$2'} onPress={() => navigation.navigate('finding') } > 
+                <ButtonText color={'$white'} fontWeight='$bold' >Start Game</ButtonText>
             </Button>
+        </Box>
+        <Box w={'$1/4'} rounded={'$lg'}  >
+            <LogOut/>
         </Box>
     </View>
   )

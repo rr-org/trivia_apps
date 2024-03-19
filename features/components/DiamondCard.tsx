@@ -48,6 +48,7 @@ export default function DiamondCard() {
                         source={require(`../../assets/diamond.png`)}
                         w={'$7'}
                         h={'$7'}
+                        alt="gambar"
                       />
                     </Center>
                     <HStack>
