@@ -7,28 +7,35 @@ interface Timeprops {
     timeAgain: () => void
 }
 export const Timeout = ({ onTimeout, validate, timeAgain }: Timeprops) => {
-    const [ sec, setSec ] = React.useState(6)
+    const [ sec, setSec ] = React.useState(5)
+    // const [ sec2, setSec2 ] = React.useState(5)
+
+
+    
 
     React.useEffect(() => {
         const interval = setInterval(() =>{
             setSec(prev => prev - 1)
         }, 1000)
 
-        if( sec === 15){
-            timeAgain()
-        }
 
-        if( sec === 5 ){
-            validate();
-        }
         if ( sec === 0) {
             clearInterval(interval)
-            setSec(5)
-            onTimeout()
+            validate()
+            setTimeout(()=> {
+                setSec(5)
+                onTimeout()
+                timeAgain()
+            }, 5000)
+
         }
+
+
         return () =>  clearInterval(interval)
         
     },[sec])
+    // console.log(sec2)
+
 
 
   return (

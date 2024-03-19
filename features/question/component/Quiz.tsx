@@ -58,6 +58,10 @@ export const Quiz = ({ navigation} : NavigateType ) => {
     },[question, currentIndex])
     React.useEffect(() => {
         playAudio()
+        if ( currentIndex === question.length ){
+            navigation.navigate('winner')
+            
+        }
     }, [quiz])
 
 
@@ -70,10 +74,7 @@ export const Quiz = ({ navigation} : NavigateType ) => {
     // const background = validation && press === items.name ? "$green" : "$red";
 
     const validate = () => {
-        if ( currentIndex === question.length ){
-            navigation.navigate('winner')
-            return ()=> clearInterval
-        }
+
         if ( press === quiz?.true){
             setpoint((prev) => prev + 100)
         }

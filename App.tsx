@@ -29,11 +29,11 @@ export default function App() {
         <SignedIn>
           <NavigationContainer>
             <Stack.Navigator>
-              <Stack.Screen name='winner' component={WinnerPage} options={{ headerShown : false}}/>
               <Stack.Screen name='create' component={CreatePages} options={{ headerShown : false}}/>
               <Stack.Screen name='home' component={HomePage} options={{ headerShown : false}}/>
               <Stack.Screen name='finding' component={FindingPage} options={{ headerShown : false}}/>
               <Stack.Screen name='quiz' component={QuizPage} options={{ headerShown : false}}/>
+              <Stack.Screen name='winner' component={WinnerPage} options={{ headerShown : false}}/>
 
             </Stack.Navigator>
           </NavigationContainer>      
