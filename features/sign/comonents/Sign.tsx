@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native'
 import { NavigateType } from '../../../types/TypeNavigate'
 import { HooksSgin } from '../hooks/HooksSgin'
 import * as WebBrowser from 'expo-web-browser'
-import { useAuth, useOAuth, useUser } from '@clerk/clerk-expo'
+import { useAuth, useClerk, useOAuth, useUser } from '@clerk/clerk-expo'
 
 WebBroser.maybeCompleteAuthSession();
 
@@ -85,9 +85,13 @@ const Sign = ({ navigation }:NavigateType) => {
       if (createdSessionId) {
         if (setActive) {
           setActive({ session: createdSessionId });
+
+
+
         } else {
           console.error("setActive is undefined");
         }
+
       } else {
         // Use signIn or signUp for next steps such as MFA
       }

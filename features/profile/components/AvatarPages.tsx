@@ -1,5 +1,6 @@
 import React, { ChangeEvent } from "react";
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -18,12 +19,15 @@ import {
   Heading,
   AvatarImage,
   Image,
+  
 } from "@gluestack-ui/themed";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { NavigateType } from "../../../types/TypeNavigate";
 import AV from "../../../mocks/avatar.json"
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import useStoreUser from "../../../store/store";
+import { useUser } from "@clerk/clerk-expo";
 
 interface IAvatar {
   avatar: string,
@@ -38,28 +42,39 @@ interface IInputAvatar {
 export const AvatarPages = ({ navigation }:NavigateType ) => {
  const [ data, setData] = React.useState("")
  const [ name, setName ] = React.useState("")
+ const setAvatar = useStoreUser((state)=> state.setAvatar)
+ const setUsername = useStoreUser((state) => state.setUsername)
+ const setEmail = useStoreUser((state)=> state.setEmail)
  const [ aa, setAA ] = React.useState<IInputAvatar>({
   avatar:"",
   name:""
  })
- const [ avatar, setAvatar ] = React.useState<IAvatar[]>([])
+ const [ avatar, setAvatars ] = React.useState<IAvatar[]>([])
+
+ // for to get email address
+ const { user } = useUser()
+ const emailAddress =  user?.emailAddresses[0]!.emailAddress
+//  console.log("login", emailAddress)
 
 
  React.useEffect(() => {
-  setAvatar(AV)
- }, [])
+  setAvatars(AV)
+}, [])
 
-const handleChangeName = ( e: ChangeEvent<HTMLInputElement>) => {
-  // const { name, value }
-  // setName(e.target)
+
+
+const handleSubmit = () => {
+
+  setEmail(emailAddress!.toString())
+  setAvatar(data)
+  setUsername(name)
+  if(name){
+    navigation.navigate('home')
+  } else {
+    Alert.alert('Error', 'Username dont empty')
+  }
 }
 
- const handleSubmit = () => {
-  console.log(data)
-  navigation.navigate('home')
-}
-
- console.log("avatar", data)
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -120,7 +135,7 @@ const handleChangeName = ( e: ChangeEvent<HTMLInputElement>) => {
                   marginTop="auto"
                   marginBottom="auto"
                 />
-                <InputField placeholder="Your Name" backgroundColor="$white" />
+                <InputField type="text" placeholder="Your Name" backgroundColor="$white"  onChangeText={(value)=> setName(value)} />
                 
               </Input>
               <Button 

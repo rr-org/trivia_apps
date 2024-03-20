@@ -9,14 +9,24 @@ import BuyDiamond from '../../Diamond/components/BuyDiamond'
 import { NavigateType } from '../../../types/TypeNavigate'
 import { LogOut } from './LogOut'
 import { useUser } from '@clerk/clerk-expo'
+import { socket } from '../../../App'
+import useStoreUser from '../../../store/store'
 
 
 export const Home = ({ navigation }:NavigateType) => {
     const [ modal, setModal ] = React.useState(false)
     const [ shop, setShop ] = React.useState(false)
+    const { username, diamond, email } = useStoreUser((state) => state.user)
     
     const { user } = useUser()
     
+    const startGame = () =>{
+        socket.emit("joinRoom", { 
+            username: username
+        })
+
+        navigation.navigate('finding') 
+    }
    
     // const { sign } = HooksSgin()
   return (
@@ -28,7 +38,7 @@ export const Home = ({ navigation }:NavigateType) => {
             <Box mx={20} bg='$amber400'>
                 <Button bgColor='$white'  w={100} gap={'$4'} h={30} onPress={() => setShop(true)}>
                     <Image source={require('../../../assets/domain.png')} w={'$10'} h={'$10'} ml={'-$16'} alt='diamond'/>
-                    <Text color='$black' fontWeight='$bold'>21</Text>
+                    <Text color='$black' fontWeight='$bold'>{diamond}</Text>
                     <Image source={require('../../../assets/plusBt.png')} w={'$12'} h={'$12'} mr={'-$16'} mt={'$3'} alt='plus'/>
                 </Button>
             </Box>
@@ -45,7 +55,9 @@ export const Home = ({ navigation }:NavigateType) => {
                 
             </Avatar>
            
-            <Text color='$white' size='3xl' shadowColor='$backgroundLight950' mt={'$5'}>bang</Text>
+            <Text color='$white' size='3xl' shadowColor='$backgroundLight950' mt={'$5'}>{username}</Text>
+            {/* <Text color='$white' size='3xl' shadowColor='$backgroundLight950' mt={'$5'}>{email}</Text> */}
+
         </Box>
         
     
@@ -103,7 +115,7 @@ export const Home = ({ navigation }:NavigateType) => {
 
 
         <Box w={'$full'} h={'50%'} display='flex'  alignItems='center' pt={'$56'} >
-            <Button w={'$1/2'} bg='$green500' shadowColor='$cyan100' shadowRadius={'$2'} onPress={() => navigation.navigate('finding') } > 
+            <Button w={'$1/2'} bg='$green500' shadowColor='$cyan100' shadowRadius={'$2'} onPress={() => startGame()} > 
                 <ButtonText color={'$white'} fontWeight='$bold' >Start Game</ButtonText>
             </Button>
         </Box>
