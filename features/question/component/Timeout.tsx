@@ -1,5 +1,6 @@
 import { Box, Text } from '@gluestack-ui/themed'
 import React from 'react'
+import { socket } from '../../../App'
 
 interface Timeprops {
     onTimeout: ()=> void,
@@ -7,33 +8,42 @@ interface Timeprops {
     timeAgain: () => void
 }
 export const Timeout = ({ onTimeout, validate, timeAgain }: Timeprops) => {
-    const [ sec, setSec ] = React.useState(5)
+    const [ sec, setSec ] = React.useState(0)
     // const [ sec2, setSec2 ] = React.useState(5)
 
-
-    
-
-    React.useEffect(() => {
-        const interval = setInterval(() =>{
-            setSec(prev => prev - 1)
-        }, 1000)
-
-
-        if ( sec === 0) {
-            clearInterval(interval)
+    socket.on("timer", (seconds)=> {
+        setSec(seconds)
+        if( seconds === 0 ){
             validate()
             setTimeout(()=> {
-                setSec(5)
-                onTimeout()
                 timeAgain()
-            }, 5000)
-
+                onTimeout()
+            },6000)
         }
+    })
+    
+
+    // React.useEffect(() => {
+    //     const interval = setInterval(() =>{
+    //         setSec(prev => prev - 1)
+    //     }, 1000)
 
 
-        return () =>  clearInterval(interval)
+    //     if ( sec === 0) {
+    //         clearInterval(interval)
+    //         validate()
+    //         setTimeout(()=> {
+    //             setSec(5)
+    //             onTimeout()
+    //             timeAgain()
+    //         }, 5000)
+
+    //     }
+
+
+    //     return () =>  clearInterval(interval)
         
-    },[sec])
+    // },[sec])
     // console.log(sec2)
 
 

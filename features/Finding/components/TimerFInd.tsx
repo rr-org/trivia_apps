@@ -1,24 +1,31 @@
 import { Heading } from '@gluestack-ui/themed'
 import React from 'react'
+import { socket } from '../../../App';
 
 interface Inext {
     nextPage: () => void;
 }
 
 export const TimerFInd = ({ nextPage }: Inext) => {
-    const [ second, setSecond ] = React.useState(5)
+    const [ second, setSecond ] = React.useState(0)
+
+
+    socket.on("matching", (seconds)=> {
+        setSecond(seconds)
+      })
+
     React.useEffect(() => {
-        const interval = setInterval(() =>{
-            setSecond((prev) => prev - 1)
-        }, 1000)
+
         
         if ( second === 0 ) {
-            clearInterval(interval)
+        
             nextPage()
         }
-        return () =>  clearInterval(interval)
+
 
     }, [ second ])
+    console.log('bang', second)
+
 
   return (
     <Heading size="5xl" color="$amber600">

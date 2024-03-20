@@ -6,7 +6,11 @@ import {
   Heading,
 } from "@gluestack-ui/themed";
 
-export default function FindOppCard() {
+interface IMatch {
+  username:string
+}
+
+export default function FindOppCard( data : IMatch) {
   return (
     <>
       <Box
@@ -22,7 +26,7 @@ export default function FindOppCard() {
           <Avatar bgColor="$amber600" size="md" borderRadius="$full">
             <AvatarFallbackText>Sandeep Srivastava</AvatarFallbackText>
           </Avatar>
-          <Heading color="white">UserName</Heading>
+          <Heading color="white">{data.username}</Heading>
         </HStack>
       </Box>
     </>

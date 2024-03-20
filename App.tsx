@@ -13,6 +13,10 @@ import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import Constants from 'expo-constants';
 import { FindingPage } from './pages/FindingPage';
 import { WinnerPage } from './pages/WinnerPage';
+import { io } from 'socket.io-client';
+
+
+export const socket = io("https://1211-2404-8000-1095-99a-5d99-75d7-c924-6556.ngrok-free.app");
 
 
 
@@ -24,6 +28,7 @@ const clerkKey = Constants?.expoConfig?.extra?.clerkPublishableKey
 export default function App() {
 
   return (
+    
     <GluestackUIProvider config={config}>     
     <ClerkProvider publishableKey={clerkKey}>
         <SignedIn>
@@ -47,6 +52,7 @@ export default function App() {
         </SignedOut>
     </ClerkProvider>
     </GluestackUIProvider>  
+    
   );
 }
 

@@ -5,33 +5,37 @@ import FindOppCard from "../../components/FindOppCard";
 import { AntDesign } from "@expo/vector-icons";
 import { NavigateType } from "../../../types/TypeNavigate";
 import { TimerFInd } from "./TimerFInd";
+import { socket } from "../../../App";
+import useStoreUser from "../../../store/store";
 
-
+interface Iroom {
+  id:string,
+  room:string,
+  username:string
+}
 
 export const FindOpp = ({ navigation }: NavigateType) => {
-  const [timer, setTimer] = useState<number>(10); // Initial timer value in seconds
+  const [ list , setList ] = useState<Iroom[]>([])
+  const [ seconds, setSeconds ] = useState<number>(0)
 
-  // useEffect(() => {
-  //   // Function to decrement timer every second
-  //   const countdown: any = setInterval(() => {
-  //     setTimer((prevTimer) => {
-  //       // Decrement timer by 1 unless it's already at 0
-  //       if (prevTimer > 0) {
-  //         return prevTimer - 1;
-  //       } else {
-  //         clearInterval(countdown);
-  //         navigation.navigate('quiz') // Stop the countdown if timer reaches 0
-  //         return 0;
-  //       }
-  //     });
-  //   }, 1000);
 
-    // Clear interval when component unmounts
-  //   return () => clearInterval(countdown);
-  // }, []); // Empty dependency array ensures the effect runs only once
-  const nextPage = () => {
-    navigation.navigate('quiz')
-  }
+  socket.on("usersList", (data) => {
+    setList(data)
+  })
+
+  socket.on("matching", (seconds)=> {
+    setSeconds(seconds)
+    if ( seconds === 0 ){
+
+      setTimeout(()=> {
+      navigation.navigate('quiz')
+      }, 1000)
+    }
+  })
+
+
+  // console.log("list user matching", list, seconds)
+
 
   return (
     <>
@@ -45,17 +49,21 @@ export const FindOpp = ({ navigation }: NavigateType) => {
         </Box>
       </HStack>
       <VStack gap={10} alignItems="center" mt="auto" mb="auto">
-        <TimerFInd nextPage={nextPage}/>
+        {/* <TimerFInd nextPage={nextPage}/> */}
+        <Heading size="5xl" color="$amber600">
+          {seconds}
+        </Heading>
         <Heading size="3xl" color="white">
           Finding Opponent
         </Heading>
         <Heading size="3xl" color="white">
-          4/5
+          {list.length}/5
         </Heading>
-        <FindOppCard />
-        <FindOppCard />
-        <FindOppCard />
-        <FindOppCard />
+        {list.map((items, index) => (
+          <FindOppCard username={items.username}/>
+        ))}
+        
+
       </VStack>
     </>
   );

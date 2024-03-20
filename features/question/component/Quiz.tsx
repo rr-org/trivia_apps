@@ -8,28 +8,100 @@ import { Alert, Pressable, StyleSheet } from 'react-native'
 import { Timeout } from './Timeout'
 import { Audio } from 'expo-av'
 import { NavigateType } from '../../../types/TypeNavigate'
+import { socket } from '../../../App'
 
-interface Iquizs{
-    name:string
-}
+
 interface IQuiz {
+    _id:string,
     question: string,
-    answers:Iquizs[],
-    true:string
+    option:string[],
+    answer:string
 }
 export const Quiz = ({ navigation} : NavigateType ) => {
 
     const [ quiz, setquiz ] = React.useState<IQuiz>({
+        _id:"",
         question: "",
-        answers:[],
-        true:""
+        option:[],
+        answer:""
     })
 
     const [ press, setPress] = React.useState<string>('')
-    const [ conditionIndex, setConditionIndex ] = React.useState(false)
     const [ currentIndex, setCurrentIndex ] = React.useState(0)
+    const [ indexQuiz , setIndexQuiz ] =React.useState(0)
     const [ validation, setValidation ] = React.useState(false)
     const [ point , setpoint ] = React.useState(0)
+
+    socket.on("question", (data) => {
+        setquiz(data)
+    })
+
+    socket.on("counter", (count)=> {
+        console.log(count)
+        // if( count >= 5) {
+        //     navigation.navigate('winner')
+            
+        // }
+        setIndexQuiz(count)
+    })
+
+    // socket.on("timer", (seconds)=> {
+    //     setCurrentIndex(seconds)
+    //     if (seconds === 0){
+    //         setValidation(true)
+
+    //         setTimeout(()=> {
+    //             if( indexQuiz === 5){
+    //                 navigation.navigate('winner')
+    //             }
+    //             setValidation(false)
+    //             setIndexQuiz((prev)=> prev + 1)
+    
+    //         },2000)
+    //     }
+
+    // })
+
+
+
+
+    // React.useEffect(()=> {
+
+    //     if ( currentIndex <= question.length ){
+    //         setquiz(question[currentIndex])
+    //     } else {
+    //         return;
+    //     }
+        
+    // },[question, currentIndex])
+    // React.useEffect(() => {
+    //     playAudio()
+    //     if ( currentIndex === question.length ){
+    //         navigation.navigate('winner')
+            
+    //     }
+    // }, [quiz])
+
+
+    // console.log("isi", currentIndex)
+    const onTimeout = () => {
+        // setCurrentIndex( prev => prev + 1)
+        // setPress('')
+        // setIndexQuiz((prev)=> prev + 1)
+    }
+
+
+    const validate = () => {
+
+        if ( press === quiz?.answer){
+            setpoint((prev) => prev + 100)
+        }
+        setValidation(true)
+    }
+
+    const timeAgain = () => [
+        setValidation(false)
+    ]
 
     const playAudio = async () => {
         const soundAudio = new Audio.Sound();
@@ -45,46 +117,6 @@ export const Quiz = ({ navigation} : NavigateType ) => {
     }
 
 
-    const quizIndex = currentIndex + 1;
-
-    React.useEffect(()=> {
-
-        if ( currentIndex <= question.length ){
-            setquiz(question[currentIndex])
-        } else {
-            return;
-        }
-        
-    },[question, currentIndex])
-    React.useEffect(() => {
-        playAudio()
-        if ( currentIndex === question.length ){
-            navigation.navigate('winner')
-            
-        }
-    }, [quiz])
-
-
-    // console.log("isi", currentIndex)
-    const onTimeout = () => {
-        setCurrentIndex( prev => prev + 1)
-        setPress('')
-    }
-
-    // const background = validation && press === items.name ? "$green" : "$red";
-
-    const validate = () => {
-
-        if ( press === quiz?.true){
-            setpoint((prev) => prev + 100)
-        }
-        setValidation(true)
-    }
-
-    const timeAgain = () => [
-        setValidation(false)
-    ]
-
 
   return (
     <Box display='flex' justifyContent='center' alignItems='center'  h={'100%'}>
@@ -98,6 +130,7 @@ export const Quiz = ({ navigation} : NavigateType ) => {
 
             <Box h={'6%'} alignItems='center'>
                 <Timeout onTimeout={onTimeout} validate={validate} timeAgain={timeAgain}/>
+                {/* <Text size='5xl' color='$emerald300'>00 : {currentIndex}</Text> */}
             </Box>
             <Box h={'$40'} alignItems='center'>
                 <Text color='white' size='6xl'>ini suara</Text>
@@ -108,11 +141,11 @@ export const Quiz = ({ navigation} : NavigateType ) => {
                 <Button onPress={playAudio}>
                     <ButtonText>play</ButtonText>
                 </Button>
-                {quiz?.answers?.map((items, index) => (
-                    <Pressable key={index} style={style.pressable} onPress={()=> setPress(items.name)}>
-                    <Box  bg={ !validation ? '$white' : items.name === quiz.true ? "$green" : "$red"} display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' w={'80%'} h={'$10'} pl={'$3'} my={'$2'} rounded={'$md'} >
-                        <Text color={ validation ? "$white" : "$black" }>{items.name}</Text>
-                        {items?.name === press && 
+                {quiz?.option?.map((items, index) => (
+                    <Pressable key={index} style={style.pressable} onPress={()=> setPress(items)}>
+                    <Box  bg={ !validation ? '$white' : items === quiz.answer ? "$green" : "$red"} display='flex' flexDirection='row' justifyContent='space-between' alignItems='center' w={'80%'} h={'$10'} pl={'$3'} my={'$2'} rounded={'$md'} >
+                        <Text color={ validation ? "$white" : "$black" }>{items}</Text>
+                        {items === press && 
                             <Avatar size='sm' mr={'$2'} >
                                 <AvatarImage source={require('../../../assets/fotoAI.jpg')}  alt='bang'/>
                             </Avatar>
@@ -124,7 +157,7 @@ export const Quiz = ({ navigation} : NavigateType ) => {
                 
             
             <Box alignItems='center' mt={'$20'}>
-                <Text color='white' size='3xl'>{quizIndex}/{ question.length }</Text>
+                <Text color='white' size='3xl'>{indexQuiz}/5</Text>
             </Box>
         </Box>
     </Box>
