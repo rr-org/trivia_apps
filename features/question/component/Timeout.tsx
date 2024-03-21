@@ -3,13 +3,11 @@ import React from 'react'
 import { socket } from '../../../App'
 
 interface Timeprops {
-    onTimeout: ()=> void,
     validate: () => void,
     timeAgain: () => void
 }
-export const Timeout = ({ onTimeout, validate, timeAgain }: Timeprops) => {
+export const Timeout = ({ validate, timeAgain }: Timeprops) => {
     const [ sec, setSec ] = React.useState(0)
-    // const [ sec2, setSec2 ] = React.useState(5)
 
     socket.on("timer", (seconds)=> {
         setSec(seconds)
@@ -17,35 +15,10 @@ export const Timeout = ({ onTimeout, validate, timeAgain }: Timeprops) => {
             validate()
             setTimeout(()=> {
                 timeAgain()
-                onTimeout()
             },6000)
         }
     })
     
-
-    // React.useEffect(() => {
-    //     const interval = setInterval(() =>{
-    //         setSec(prev => prev - 1)
-    //     }, 1000)
-
-
-    //     if ( sec === 0) {
-    //         clearInterval(interval)
-    //         validate()
-    //         setTimeout(()=> {
-    //             setSec(5)
-    //             onTimeout()
-    //             timeAgain()
-    //         }, 5000)
-
-    //     }
-
-
-    //     return () =>  clearInterval(interval)
-        
-    // },[sec])
-    // console.log(sec2)
-
 
 
   return (

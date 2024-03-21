@@ -45,10 +45,10 @@ export const FindOpp = ({ navigation }: NavigateType) => {
           alt="gambar"
         />
         <Box p={15}>
-          <AntDesign name="closecircle" size={24} color="white" />
+          <AntDesign name="closecircle" size={24} color="white" onAccessibilityAction={()=> {navigation.navigate('home')}}/>
         </Box>
       </HStack>
-      <VStack gap={10} alignItems="center" mt="auto" mb="auto">
+      <Box gap={10} alignItems="center" mt="auto" mb="auto">
         {/* <TimerFInd nextPage={nextPage}/> */}
         <Heading size="5xl" color="$amber600">
           {seconds}
@@ -64,7 +64,7 @@ export const FindOpp = ({ navigation }: NavigateType) => {
         ))}
         
 
-      </VStack>
+      </Box>
     </>
   );
 };

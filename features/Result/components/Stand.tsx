@@ -35,7 +35,7 @@ export const Stand = ({ navigation }: NavigateType) => {
             <Image
               source={require("../../../assets/stand.png")}
               alt="gambar"
-              w={'$72'}
+              w={'90%'}
               h={'$64'}
               mt={'-$10'}
             />
