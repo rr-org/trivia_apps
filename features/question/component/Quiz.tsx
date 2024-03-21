@@ -2,14 +2,12 @@ import { faTrophy } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { Avatar, AvatarImage, Box, Button, ButtonText, HStack, Input,  Text } from '@gluestack-ui/themed'
 import React from 'react'
-import Sound from 'react-native-sound'
-import question from "../../../mocks/quiz.json"
-import { Alert, Pressable, StyleSheet } from 'react-native'
+import { Pressable, StyleSheet } from 'react-native'
 import { Timeout } from './Timeout'
 import { Audio } from 'expo-av'
 import { NavigateType } from '../../../types/TypeNavigate'
-import { socket } from '../../../App'
 import { IndexQuiz } from './IndexQuiz'
+import { socket } from '../../../socket'
 
 
 interface IQuiz {

@@ -1,15 +1,23 @@
-import { StatusBar } from "expo-status-bar"
 import Sign from "../features/sign/comonents/Sign"
-import { Layout } from "../layout/Layout"
-import { NavigateType } from "../types/TypeNavigate"
+import { LinearGradient } from "expo-linear-gradient"
+import { StyleSheet } from "react-native"
 
 
-export const SignPage = ({ navigation }: NavigateType) => {
+export const SignPage = () => {
   return (
-    <Layout>
-        <Sign navigation={navigation} />
-        <StatusBar style="auto" />
-    </Layout>
+    <LinearGradient
+    colors={['#5ecdb8', '#569cdf', '#560be5']}
+    style={styles.container}
+    >
+        <Sign  />
+  </LinearGradient>
+
   )
 }
+const styles = StyleSheet.create({
+  container: {
+  width:'100%',
+  height:'100%'
+  },
+});
 

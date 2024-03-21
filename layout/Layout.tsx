@@ -1,4 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient'
+import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 
@@ -9,6 +10,7 @@ export const Layout = ({children}:{children:React.ReactNode}) => {
     style={styles.container}
     >
           {children} 
+          <StatusBar style="auto" />
   </LinearGradient>
   )
 }

@@ -1,12 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Box, HStack, Heading, Image, VStack } from "@gluestack-ui/themed";
-import { Text } from "@gluestack-ui/themed";
+import React, { useState } from "react";
+import { Box, HStack, Heading, Image } from "@gluestack-ui/themed";
 import FindOppCard from "../../components/FindOppCard";
 import { AntDesign } from "@expo/vector-icons";
 import { NavigateType } from "../../../types/TypeNavigate";
-import { TimerFInd } from "./TimerFInd";
-import { socket } from "../../../App";
-import useStoreUser from "../../../store/store";
+import { socket } from "../../../socket";
 
 interface Iroom {
   id:string,
@@ -14,7 +11,7 @@ interface Iroom {
   username:string
 }
 
-export const FindOpp = ({ navigation }: NavigateType) => {
+const FindOpp = ({ navigation }: NavigateType) => {
   const [ list , setList ] = useState<Iroom[]>([])
   const [ seconds, setSeconds ] = useState<number>(0)
 
@@ -38,8 +35,8 @@ export const FindOpp = ({ navigation }: NavigateType) => {
 
 
   return (
-    <>
-      <HStack p={10} justifyContent="space-between">
+    <Box>
+      <Box p={10} flexDirection="row" justifyContent="space-between" >
         <Image
           source={require("../../../assets/rr.png")}
           alt="gambar"
@@ -47,8 +44,8 @@ export const FindOpp = ({ navigation }: NavigateType) => {
         <Box p={15}>
           <AntDesign name="closecircle" size={24} color="white" onAccessibilityAction={()=> {navigation.navigate('home')}}/>
         </Box>
-      </HStack>
-      <Box gap={10} alignItems="center" mt="auto" mb="auto">
+      </Box>
+      <Box gap={10} alignItems="center" mt="auto" mb="auto"  h={'100%'}>
         {/* <TimerFInd nextPage={nextPage}/> */}
         <Heading size="5xl" color="$amber600">
           {seconds}
@@ -60,13 +57,13 @@ export const FindOpp = ({ navigation }: NavigateType) => {
           {list.length}/5
         </Heading>
         {list.map((items, index) => (
-          <FindOppCard username={items.username}/>
+          <FindOppCard username={items.username} key={index}/>
         ))}
         
 
       </Box>
-    </>
+    </Box>
   );
 };
 
-
+export default FindOpp

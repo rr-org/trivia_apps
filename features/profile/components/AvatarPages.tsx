@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from "react";
+import React from "react";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -28,6 +28,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import useStoreUser from "../../../store/store";
 import { useUser } from "@clerk/clerk-expo";
+import { useNavigation } from "@react-navigation/native";
 
 interface IAvatar {
   avatar: string,
@@ -39,7 +40,7 @@ interface IInputAvatar {
   name: string
 }
 
-export const AvatarPages = ({ navigation }:NavigateType ) => {
+export const AvatarPages = ({ navigation}: NavigateType) => {
  const [ data, setData] = React.useState("")
  const [ name, setName ] = React.useState("")
  const setAvatar = useStoreUser((state)=> state.setAvatar)
@@ -54,7 +55,8 @@ export const AvatarPages = ({ navigation }:NavigateType ) => {
  // for to get email address
  const { user } = useUser()
  const emailAddress =  user?.emailAddresses[0]!.emailAddress
-//  console.log("login", emailAddress)
+ const userName = user?.firstName
+//  console.log("login",userName )
 
 
  React.useEffect(() => {
@@ -71,7 +73,8 @@ const handleSubmit = () => {
   if(name){
     navigation.navigate('home')
   } else {
-    Alert.alert('Error', 'Username dont empty')
+    setUsername(userName!.toString())
+    navigation.navigate('home')
   }
 }
 
@@ -141,7 +144,7 @@ const handleSubmit = () => {
               <Button 
               backgroundColor="$green500" 
               onPress={() => 
-              handleSubmit()
+                handleSubmit()
               }>
                 <ButtonText fontWeight={"$extrabold"} fontSize={"$xl"}>
                   Continue

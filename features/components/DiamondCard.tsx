@@ -8,11 +8,21 @@ import {
   Heading,
   ButtonText,
   Box,
+  Pressable,
 } from "@gluestack-ui/themed";
 import dataDummy from "../../mocks/diamond.json";
 import { Image } from "@gluestack-ui/themed";
-export default function DiamondCard() {
+import React from "react";
+
+interface IProps {
+  onSubmit:()=> void
+}
+export default function DiamondCard({ onSubmit }: IProps) {
+  const [ choose, setChoose ] = React.useState(0)
+
   function formatRupiah(angka:number) {
+
+
     var reverse = angka.toString().split('').reverse().join('')
     let ribuan = reverse.match(/\d{1,3}/g);
     if (ribuan === null) {
@@ -21,6 +31,13 @@ export default function DiamondCard() {
     let rupiah = ribuan.join('.').split('').reverse().join('');
     return 'Rp ' + rupiah;
   }
+
+  const submit = () => {
+    console.log("bang")
+    onSubmit()
+
+  }
+  // console.log(choose)
   return (
     <>
       <VStack gap={15} mt={'$16'}>
@@ -29,6 +46,7 @@ export default function DiamondCard() {
             (
               item // Corrected: added parentheses around the JSX
             ) => (
+              <Pressable key={item.id} onPress={()=> setChoose(item.diamond)}>
               <Card
                 key={item.id}
                 size="sm"
@@ -37,7 +55,7 @@ export default function DiamondCard() {
                 pt={5}
                 borderColor="$blue500"
                 borderWidth={1}
-                backgroundColor="$blue200"
+                backgroundColor={choose === item.diamond ? "$green400" : "$blue200" }
               >
                 <VStack>
                   <Center gap={8}>
@@ -59,8 +77,18 @@ export default function DiamondCard() {
                   </Center>
                 </VStack>
               </Card>
+              </Pressable>
             )
           )}
+
+        <HStack justifyContent='center' gap={10} w={'$full'} >
+          <Button backgroundColor="red" width={100} onPress={() => submit()}>
+              <ButtonText>Cancel</ButtonText>
+          </Button>
+          <Button backgroundColor="$green500" width={100} onPress={() => submit()}>
+              <ButtonText>Save</ButtonText>
+          </Button>
+        </HStack>
         </HStack>
       </VStack>
     </>

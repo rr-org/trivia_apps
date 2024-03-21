@@ -12,7 +12,7 @@ import { useAuth, useClerk, useOAuth, useUser } from '@clerk/clerk-expo'
 
 WebBroser.maybeCompleteAuthSession();
 
-const Sign = ({ navigation }:NavigateType) => {
+const Sign = () => {
   // sign with google in web
   // const [ data, setData ] = React.useState(null)
   // const [ request, response, prompt] = Google.useAuthRequest({

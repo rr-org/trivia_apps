@@ -1,7 +1,7 @@
 import { Text } from '@gluestack-ui/themed'
 import React from 'react'
-import { socket } from '../../../App'
 import { NavigateType } from '../../../types/TypeNavigate'
+import { socket } from '../../../socket'
 
 export const IndexQuiz = ({ navigation} : NavigateType ) => {
     const [ indexQuiz , setIndexQuiz ] =React.useState(0)

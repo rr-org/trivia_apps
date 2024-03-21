@@ -1,15 +1,32 @@
 import {
   Avatar,
   AvatarImage,
+  Button,
+  ButtonText,
   Card,
   HStack,
   Heading,
+  Pressable,
  
 } from "@gluestack-ui/themed";
 import dataDummy from "../../mocks/data.json";
 import { Box } from "@gluestack-ui/themed";
 import { Text } from "@gluestack-ui/themed";
-export default function AvatarCard() {
+import React from "react";
+
+interface IProps {
+  onSubmit:()=> void
+}
+export default function AvatarCard({ onSubmit }: IProps) {
+  const [ choose, setChoose ] = React.useState(0)
+
+  const submit = () => {
+    // console.log("bang")
+    onSubmit()
+
+  }
+  
+
   return (
     <>
       <Box gap={15} mt={'$16'}>
@@ -18,14 +35,14 @@ export default function AvatarCard() {
             (
               item // Corrected: added parentheses around the JSX
             ) => (
+              <Pressable key={item.id} onPress={()=> setChoose(item.id) }>
               <Card
-                key={item.id}
                 w={'$24'}
-                variant="elevated"
                 m="$3"
                 borderColor="black"
                 borderWidth={1}
-                backgroundColor="$blue200"
+                backgroundColor={ item.id === choose ? "$green400" : "$blue200"}
+
               >
                 <Box gap={20}  display="flex" justifyContent="center" alignItems="center">
                   
@@ -33,7 +50,7 @@ export default function AvatarCard() {
                         <AvatarImage source={{ uri: item.avatar }} alt="avatar" />
                       </Avatar>
                     
-                    <Box display="flex"  alignItems="center" gap={3} >
+                    <Box display="flex" flexDirection="row"  alignItems="center" gap={3} >
                       
                       <Avatar
                       bg="transparent"
@@ -46,8 +63,17 @@ export default function AvatarCard() {
                   
                 </Box>
               </Card>
+              </Pressable>
             )
           )}
+        </HStack>
+        <HStack justifyContent='center' gap={10} w={'$full'} >
+                    <Button backgroundColor="red" width={100} onPress={() => submit()}>
+                    <ButtonText>Cancel</ButtonText>
+                    </Button>
+                    <Button backgroundColor="$green500" width={100} onPress={() => submit()}>
+                    <ButtonText>Save</ButtonText>
+                    </Button>
         </HStack>
    
       </Box>

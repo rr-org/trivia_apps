@@ -1,33 +1,35 @@
 import { Avatar, AvatarBadge, AvatarGroup, AvatarImage, Box, Button, ButtonIcon, Center, HStack, Image, Modal, ModalBody, ModalFooter, Text, View } from '@gluestack-ui/themed'
 import React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faPen, faPenSquare, faPenToSquare } from '@fortawesome/free-solid-svg-icons'
+import { faPenToSquare } from '@fortawesome/free-solid-svg-icons'
 import { ModalBackdrop } from '@gluestack-ui/themed'
-import ChooseAvatar from '../../profile/components/ChooseAvatar'
 import { ButtonText } from '@gluestack-ui/themed'
 import BuyDiamond from '../../Diamond/components/BuyDiamond'
-import { NavigateType } from '../../../types/TypeNavigate'
 import { LogOut } from './LogOut'
-import { useUser } from '@clerk/clerk-expo'
-import { socket } from '../../../App'
 import useStoreUser from '../../../store/store'
+import { socket } from '../../../socket'
+import { NavigateType } from '../../../types/TypeNavigate'
+import AvatarCard from '../../components/AvatarCard'
+import DiamondCard from '../../components/DiamondCard'
 
 
-export const Home = ({ navigation }:NavigateType) => {
+ const Home = ({navigation}: NavigateType) => {
     const [ modal, setModal ] = React.useState(false)
     const [ shop, setShop ] = React.useState(false)
     const { username, diamond, email } = useStoreUser((state) => state.user)
-    
-    const { user } = useUser()
+
     
     const startGame = () =>{
         socket.emit("joinRoom", { 
             username: username
         })
 
-        navigation.navigate('finding') 
+        navigation.navigate('finding' as never)
     }
    
+    const closeModal = () => {
+        setModal(false)
+    }
     // const { sign } = HooksSgin()
   return (
     <View h={'$full'}>
@@ -70,19 +72,7 @@ export const Home = ({ navigation }:NavigateType) => {
             >
             <ModalBackdrop />
             <ModalBody>
-                <ChooseAvatar/>
-                <ModalFooter>
-                
-                <HStack justifyContent='center' gap={10} w={'$full'} >
-                    <Button backgroundColor="red" width={100} onPress={() => setModal(false)}>
-                    <ButtonText>Cancel</ButtonText>
-                    </Button>
-                    <Button backgroundColor="$green500" width={100} onPress={() => setModal(false)}>
-                    <ButtonText>Save</ButtonText>
-                    </Button>
-                </HStack>
-                
-            </ModalFooter>
+                <AvatarCard onSubmit={closeModal}/>
             </ModalBody>
 
         </Modal>
@@ -95,19 +85,8 @@ export const Home = ({ navigation }:NavigateType) => {
             >
             <ModalBackdrop />
             <ModalBody>
-                <BuyDiamond/>
-                <ModalFooter>
-                
-                <HStack justifyContent='center' gap={10} w={'$full'} >
-                    <Button backgroundColor="red" width={100} onPress={() => setShop(false)}>
-                    <ButtonText>Cancel</ButtonText>
-                    </Button>
-                    <Button backgroundColor="$green500" width={100} onPress={() => setShop(false)}>
-                    <ButtonText>Purchase</ButtonText>
-                    </Button>
-                </HStack>
-                
-            </ModalFooter>
+                {/* <BuyDiamond/> */}
+                <DiamondCard onSubmit={()=> setShop(false)}/>
             </ModalBody>
 
         </Modal>
@@ -125,3 +104,4 @@ export const Home = ({ navigation }:NavigateType) => {
     </View>
   )
 }
+export default Home

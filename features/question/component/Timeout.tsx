@@ -1,6 +1,6 @@
 import { Box, Text } from '@gluestack-ui/themed'
 import React from 'react'
-import { socket } from '../../../App'
+import { socket } from '../../../socket'
 
 interface Timeprops {
     validate: () => void,

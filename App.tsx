@@ -1,5 +1,4 @@
 
-import { AppRegistry, StyleSheet, Text, View } from 'react-native';
 import { SignPage } from './pages/SignPage';
 import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { config } from '@gluestack-ui/config';
@@ -8,15 +7,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomePage } from './pages/HomePage';
 import { QuizPage } from './pages/QuizPage';
 import { CreatePages } from './pages/CreatePages';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ClerkProvider, SignedIn, SignedOut } from '@clerk/clerk-expo';
 import Constants from 'expo-constants';
 import { FindingPage } from './pages/FindingPage';
 import { WinnerPage } from './pages/WinnerPage';
-import { io } from 'socket.io-client';
 
 
-export const socket = io("https://c211-2404-8000-1095-6b7-a930-aee-428f-84.ngrok-free.app");
 
 
 
@@ -29,9 +25,10 @@ export default function App() {
 
   return (
     
-    <GluestackUIProvider config={config}>     
+       
     <ClerkProvider publishableKey={clerkKey}>
         <SignedIn>
+          <GluestackUIProvider config={config}>
           <NavigationContainer>
             <Stack.Navigator>
               <Stack.Screen name='create' component={CreatePages} options={{ headerShown : false}}/>
@@ -39,26 +36,16 @@ export default function App() {
               <Stack.Screen name='finding' component={FindingPage} options={{ headerShown : false}}/>
               <Stack.Screen name='quiz' component={QuizPage} options={{ headerShown : false}}/>
               <Stack.Screen name='winner' component={WinnerPage} options={{ headerShown : false}}/>
-
             </Stack.Navigator>
           </NavigationContainer>      
+          </GluestackUIProvider>
         </SignedIn>
         <SignedOut>
-          <NavigationContainer>
-            <Stack.Navigator>
-              <Stack.Screen name='sign' component={SignPage} options={{ headerShown : false}}/>
-            </Stack.Navigator>
-          </NavigationContainer>
+          <GluestackUIProvider config={config}>  
+            <SignPage/>
+          </GluestackUIProvider>
         </SignedOut>
     </ClerkProvider>
-    </GluestackUIProvider>  
-    
   );
 }
 
-// const styles = StyleSheet.create({
-//   container: {
-//   width:'100%',
-//   height:'100%'
-//   },
-// });

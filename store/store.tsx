@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 interface Iuser {
     id: any,
-    username: string,
+    username: string | null | undefined,
     email: string | undefined,
     avatar:string,
     diamond:number
@@ -29,7 +29,7 @@ interface IuserStore {
 const useStoreUser = create<IuserStore>((set) => ({
     user: initialState,
     setEmail: ( email : string | undefined ) => set((state) => ({ user: { ...state.user, email}})),
-    setUsername: ( username : string ) => set((state) => ({ user: { ...state.user, username}})),
+    setUsername: ( username : string | null | undefined ) => set((state) => ({ user: { ...state.user, username}})),
     setAvatar: ( avatar : string ) => set((state) => ({ user: { ...state.user, avatar}})),
     setDiamond: ( diamond : number ) => set((state) => ({ user: { ...state.user, diamond}})),
     setMinDiamond: ( diamond : number ) => set((state) => ({ user: { ...state.user, diamond: state.user.diamond - diamond}}))

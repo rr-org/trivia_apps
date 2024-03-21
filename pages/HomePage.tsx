@@ -1,14 +1,25 @@
 import React from 'react'
-import { Layout } from '../layout/Layout'
-import { Home } from '../features/home/component/Home'
-import { StatusBar } from 'expo-status-bar'
+import { LinearGradient } from 'expo-linear-gradient'
+import { StyleSheet } from 'react-native'
+import Home from '../features/home/component/Home'
 import { NavigateType } from '../types/TypeNavigate'
 
-export const HomePage = ({ navigation }: NavigateType) => {
+
+
+
+export const HomePage = ({ navigation}: NavigateType) => {
   return (
-    <Layout>
-        <Home navigation={navigation}/>
-        <StatusBar style="auto" />
-    </Layout>
+    <LinearGradient
+    colors={['#5ecdb8', '#569cdf', '#560be5']}
+    style={styles.container}
+    >
+      <Home navigation={navigation}/>
+  </LinearGradient>
   )
 }
+const styles = StyleSheet.create({
+  container: {
+  width:'100%',
+  height:'100%'
+  },
+});
