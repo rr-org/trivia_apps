@@ -9,6 +9,7 @@ import { Timeout } from './Timeout'
 import { Audio } from 'expo-av'
 import { NavigateType } from '../../../types/TypeNavigate'
 import { socket } from '../../../App'
+import { IndexQuiz } from './IndexQuiz'
 
 
 interface IQuiz {
@@ -19,90 +20,46 @@ interface IQuiz {
 }
 export const Quiz = ({ navigation} : NavigateType ) => {
 
+    // state for save question
     const [ quiz, setquiz ] = React.useState<IQuiz>({
         _id:"",
         question: "",
         option:[],
         answer:""
     })
-
+    // state for comparison answer user
     const [ press, setPress] = React.useState<string>('')
-    const [ currentIndex, setCurrentIndex ] = React.useState(0)
-    const [ indexQuiz , setIndexQuiz ] =React.useState(0)
+    //state for condition validate true or false a answers
     const [ validation, setValidation ] = React.useState(false)
+    //state for point if user true a answer
     const [ point , setpoint ] = React.useState(0)
 
+
+    //socket to get question from backend and set to state quiz
     socket.on("question", (data) => {
         setquiz(data)
+        playAudio()
     })
 
-    socket.on("counter", (count)=> {
-        console.log(count)
-        // if( count >= 5) {
-        //     navigation.navigate('winner')
-            
-        // }
-        setIndexQuiz(count)
-    })
-
-    // socket.on("timer", (seconds)=> {
-    //     setCurrentIndex(seconds)
-    //     if (seconds === 0){
-    //         setValidation(true)
-
-    //         setTimeout(()=> {
-    //             if( indexQuiz === 5){
-    //                 navigation.navigate('winner')
-    //             }
-    //             setValidation(false)
-    //             setIndexQuiz((prev)=> prev + 1)
-    
-    //         },2000)
-    //     }
-
-    // })
-
-
-
-
-    // React.useEffect(()=> {
-
-    //     if ( currentIndex <= question.length ){
-    //         setquiz(question[currentIndex])
-    //     } else {
-    //         return;
-    //     }
-        
-    // },[question, currentIndex])
-    // React.useEffect(() => {
-    //     playAudio()
-    //     if ( currentIndex === question.length ){
-    //         navigation.navigate('winner')
-            
-    //     }
-    // }, [quiz])
-
-
-    // console.log("isi", currentIndex)
-    const onTimeout = () => {
-        // setCurrentIndex( prev => prev + 1)
-        // setPress('')
-        // setIndexQuiz((prev)=> prev + 1)
-    }
-
-
+    //function for validate a answer of the true
     const validate = () => {
 
+        //condition if answers is true
         if ( press === quiz?.answer){
             setpoint((prev) => prev + 100)
         }
+
         setValidation(true)
     }
 
+
+    //set default validate/ wipe a validate
     const timeAgain = () => [
         setValidation(false)
     ]
 
+
+    //function play a audio
     const playAudio = async () => {
         const soundAudio = new Audio.Sound();
 
@@ -129,15 +86,13 @@ export const Quiz = ({ navigation} : NavigateType ) => {
             </Box>
 
             <Box h={'6%'} alignItems='center'>
-                <Timeout onTimeout={onTimeout} validate={validate} timeAgain={timeAgain}/>
-                {/* <Text size='5xl' color='$emerald300'>00 : {currentIndex}</Text> */}
+                <Timeout validate={validate} timeAgain={timeAgain}/>
             </Box>
             <Box h={'$40'} alignItems='center'>
                 <Text color='white' size='6xl'>ini suara</Text>
             </Box>
             
             <Box alignItems='center'>
-                {/* <Text size='4xl' color='white'>{quiz.question}</Text> */}
                 <Button onPress={playAudio}>
                     <ButtonText>play</ButtonText>
                 </Button>
@@ -157,7 +112,7 @@ export const Quiz = ({ navigation} : NavigateType ) => {
                 
             
             <Box alignItems='center' mt={'$20'}>
-                <Text color='white' size='3xl'>{indexQuiz}/5</Text>
+                <IndexQuiz navigation={navigation}/>
             </Box>
         </Box>
     </Box>
