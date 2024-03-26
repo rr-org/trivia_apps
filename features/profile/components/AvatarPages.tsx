@@ -11,7 +11,6 @@ import {
   ButtonText,
   Avatar,
   Box,
-  HStack,
   Center,
   VStack,
   Input,
@@ -29,52 +28,115 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import useStoreUser from "../../../store/store";
 import { useUser } from "@clerk/clerk-expo";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
+
+
+
+interface Iuser {
+  id: string,
+  avatar: string | null,
+  username: string | null,
+  email:string,
+  score:number,
+  diamond:number
+}
 
 interface IAvatar {
-  avatar: string,
-  kode: string
+  _id: string,
+  image: string,
+  price: string,
+  isLocked:boolean,
+  eqquiped: boolean,
 }
 
-interface IInputAvatar {
-  avatar: string,
-  name: string
-}
 
 export const AvatarPages = ({ navigation}: NavigateType) => {
  const [ data, setData] = React.useState("")
  const [ name, setName ] = React.useState("")
+ const setId = useStoreUser((state)=> state.setId)
  const setAvatar = useStoreUser((state)=> state.setAvatar)
  const setUsername = useStoreUser((state) => state.setUsername)
  const setEmail = useStoreUser((state)=> state.setEmail)
- const [ aa, setAA ] = React.useState<IInputAvatar>({
-  avatar:"",
-  name:""
- })
+ const setDiamond = useStoreUser((state)=> state.setDiamond)
  const [ avatar, setAvatars ] = React.useState<IAvatar[]>([])
+ const [ aa, setAA ] = React.useState<Iuser>({
+  id: "",
+  avatar: "",
+  username: "",
+  email:"",
+  score:0,
+  diamond:0
+ })
 
+ 
  // for to get email address
  const { user } = useUser()
  const emailAddress =  user?.emailAddresses[0]!.emailAddress
  const userName = user?.firstName
 //  console.log("login",userName )
+const regis = async() => {
+  try {
+    const response = await axios.post("https://4211-2404-8000-1095-99a-25dc-eab5-fc6d-55a0.ngrok-free.app/api/register", {
+      email:emailAddress
+    })
 
+    setAA(response.data.data)
+    setId(response.data.data.id)
+    setAvatar(response.data.data.avatar)
+    setUsername(response.data.data.username)
+    setEmail(emailAddress!.toString())
+    setDiamond(response.data.data.diamond)
+
+    // console.log("state", aa)
+    if ( response.data.data.username ){
+      navigation.navigate('home')
+    }
+
+  } catch (error) {
+    console.log("eror",error)
+  }
+}
+
+const avatarImage = async( ) => {
+  try{
+    const response = await axios.get("https://1951-2404-8000-1095-99a-25dc-eab5-fc6d-55a0.ngrok-free.app/api/avatar ")
+    // console.log("response", response.data)
+    setAvatars(response.data)
+  } catch (error) {
+    console.log("eror get data avatar")
+  }
+}
+
+const postQuiped = async() => {
+  try {
+    const response = await axios.patch("https://4211-2404-8000-1095-99a-25dc-eab5-fc6d-55a0.ngrok-free.app/api/user/first", {
+      email:emailAddress,
+      username:name,
+      avatar:data
+    })
+    if( response.data ){
+      navigation.navigate('home')
+    }
+  } catch (error) {
+    
+  }
+}
 
  React.useEffect(() => {
-  setAvatars(AV)
+  regis()
+  avatarImage()
+
 }, [])
 
 
 
 const handleSubmit = () => {
 
-  setEmail(emailAddress!.toString())
   setAvatar(data)
   setUsername(name)
-  if(name){
-    navigation.navigate('home')
-  } else {
-    setUsername(userName!.toString())
-    navigation.navigate('home')
+  postQuiped()
+  if ( !name ){
+    Alert.alert("username gk boleh kosong")
   }
 }
 
@@ -102,15 +164,14 @@ const handleSubmit = () => {
           <Center>
           <Box flexDirection="row" flexWrap="wrap" gap={20} justifyContent="center" w={'70%'} >
             {avatar.map((items, index) => (
-              <Pressable key={index} onPress={()=> setData(items.kode)}>
-                <Avatar bgColor="$amber600" size={ data === items.kode ? "lg" : "md"} borderRadius="$full">
+              <Pressable key={index} onPress={()=> setData(items.image)}>
+                <Avatar bgColor="$amber600" size={ data === items.image ? "lg" : "md"} borderRadius="$full">
                   <AvatarImage
                     alt="igame"
-                    source={require("../../../assets/fotoAI.jpg")}
-                  
+                    source={{ uri: items.image}}
                     />                  
                 </Avatar>
-                { data === items.kode && 
+                { data === items.image && 
                 <Box w={'$5'} h={'$5'} bg="white" rounded={'$full'} p={'$1'} alignItems="center"  ml={'$10'} mt={'-$5'}>
                   <FontAwesomeIcon icon={faCheck} />
                 </Box>

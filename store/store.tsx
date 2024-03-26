@@ -5,12 +5,12 @@ interface Iuser {
     id: any,
     username: string | null | undefined,
     email: string | undefined,
-    avatar:string,
+    avatar:string | undefined,
     diamond:number
 }
 
 const initialState:Iuser = {
-    id: 0,
+    id: "",
     username: "",
     email: "",
     avatar:"",
@@ -19,18 +19,20 @@ const initialState:Iuser = {
 
 interface IuserStore {
     user: Iuser,
-    setUsername: ( username: string ) => void;
+    setId: ( id: string ) => void;
+    setUsername: ( username: string | null ) => void;
     setEmail: ( email: string ) => void;
-    setAvatar: ( avatar: string ) => void;
+    setAvatar: ( avatar: string | undefined) => void;
     setDiamond: ( diamond: number) => void;
     setMinDiamond: ( diamond: number ) => void | undefined;
 }
 
 const useStoreUser = create<IuserStore>((set) => ({
     user: initialState,
+    setId: ( id: string ) => set((state) => ({ user: { ...state.user, id}})),
     setEmail: ( email : string | undefined ) => set((state) => ({ user: { ...state.user, email}})),
     setUsername: ( username : string | null | undefined ) => set((state) => ({ user: { ...state.user, username}})),
-    setAvatar: ( avatar : string ) => set((state) => ({ user: { ...state.user, avatar}})),
+    setAvatar: ( avatar : string | undefined) => set((state) => ({ user: { ...state.user, avatar: avatar ?? state.user.avatar}})),
     setDiamond: ( diamond : number ) => set((state) => ({ user: { ...state.user, diamond}})),
     setMinDiamond: ( diamond : number ) => set((state) => ({ user: { ...state.user, diamond: state.user.diamond - diamond}}))
 }))

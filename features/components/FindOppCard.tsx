@@ -1,13 +1,18 @@
 import {
   Avatar,
   AvatarFallbackText,
+  AvatarImage,
   Box,
   HStack,
   Heading,
 } from "@gluestack-ui/themed";
 
 interface IMatch {
-  username:string
+  data:{
+    id:string,
+    username:string,
+    avatar:string
+  }
 }
 
 export default function FindOppCard( data : IMatch) {
@@ -24,9 +29,13 @@ export default function FindOppCard( data : IMatch) {
       >
         <HStack alignItems="center" gap={10}>
           <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-            <AvatarFallbackText>Sandeep Srivastava</AvatarFallbackText>
+            {data.data.avatar ? 
+            <AvatarImage source={{ uri: data.data.avatar}} alt="userImage"/>
+              :
+            <AvatarFallbackText>{data.data.username}</AvatarFallbackText>
+          }
           </Avatar>
-          <Heading color="white">{data.username}</Heading>
+          <Heading color="white">{data.data.username}</Heading>
         </HStack>
       </Box>
     </>

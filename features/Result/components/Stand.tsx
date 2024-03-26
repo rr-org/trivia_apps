@@ -15,6 +15,9 @@ import { NavigateType } from "../../../types/TypeNavigate";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCrown } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
+import { socket } from "../../../socket";
+import useStoreUser from "../../../store/store";
+import useStoreRoom from "../../../store/roomStore";
 
 
 const data = [
@@ -40,10 +43,12 @@ const data = [
   }
 ]
 
+
 export const Stand = ({ navigation }: NavigateType) => {
   //state for winner or lose text
   const [ winner, setWinner ] = React.useState(false)
-
+  const { username } = useStoreUser((state) => state.user)
+  const { room } = useStoreRoom((state)=> state.room)
   //sort for to data max to min
   const sortedData = [...data].sort((a, b) => b.score - a.score);
   //sort for to data min to max( reverse )
@@ -51,7 +56,10 @@ export const Stand = ({ navigation }: NavigateType) => {
   //set data to 2 index
   const topTwoData = reversedData.slice(0, 2);
 
+  const leave = () =>  {
 
+    socket.emit("leaveRoom",{ username: username, room: room})
+  }
   
   return (
     <Box w={'$full'} h={'$full'} alignItems="center" > 
@@ -128,6 +136,7 @@ export const Stand = ({ navigation }: NavigateType) => {
 
               {topTwoData.map((items, index)=> (
                 <Box
+                key={index}
                   borderColor="white"
                   borderWidth={2}
                   py={10}
@@ -156,10 +165,10 @@ export const Stand = ({ navigation }: NavigateType) => {
           
         </Box>
         <Box flexDirection="row" justifyContent="space-between" w={'100%'} p={'$4'}  >
-          <Button rounded={'$md'} bg="red" w={'45%'} onPress={()=> navigation.navigate('home')}>
+          <Button rounded={'$md'} bg="red" w={'45%'} onPress={()=> {navigation.navigate('home'), leave()}}>
             <ButtonText>Return to Home</ButtonText>
           </Button>
-          <Button rounded={'$md'} bg="$emerald500" w={'45%'} onPress={()=> navigation.navigate('finding')}>
+          <Button rounded={'$md'} bg="$emerald500" w={'45%'} onPress={()=> {navigation.navigate('home'), leave()}}>
             <ButtonText>Play Again</ButtonText>
           </Button>
         </Box>
